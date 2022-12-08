@@ -3,7 +3,7 @@ import dash
 from dash import callback, Output, Input, State, MATCH, html, ctx, dcc
 import dash_mantine_components as dmc
 import utils as u
-import pyperclip as clip
+from clipboard import copy
 
 dash.register_page(__name__, path='/app_cards', title='Home')
 
@@ -142,6 +142,6 @@ def copy_code(url, clicks, id):
     with open(card_desc[id["index"]]["code"], "r") as file:
         code = file.read()
 
-    clip.copy(code)
+    copy(code)
 
     return None
