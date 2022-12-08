@@ -55,7 +55,7 @@ layout = dmc.Grid(
                                 pl="md"
                             ),
                             dmc.Text(
-                                "1 Component",
+                                "2 Component",
                                 size="xs",
                                 pl="md",
                                 pb="md",
