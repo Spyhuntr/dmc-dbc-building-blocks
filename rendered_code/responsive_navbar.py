@@ -84,43 +84,5 @@ app.layout = html.Div([
 
 if __name__ == '__main__':
     app.run_server(
-        host='0.0.0.0',
-        port=8050,
-        debug=True,
-        dev_tools_props_check=True
+        debug=True
     )
-
-
-
-#Uncomment and add the following code into your style.css file
-# body, .mantine-Header-root {
-#     background-color: #f2f4f6 !important;
-# } 
-
-#  .mantine-Navbar-root {
-#     background-color: #1f2937!important;
-# }
-
-# .mantine-Anchor-root {
-#     color: #fff!important;
-# }
-# .nav-list-items {
-#     padding: 1rem;
-#     color: #fff!important;
-#     text-decoration: none;
-#     list-style: none;
-# }
-
-# .nav-list-items:hover {
-#     color: #f2f4f6!important;
-#     background-color: #374151!important;
-# }
-
-# .mantine-Navbar-root a:-webkit-any-link{
-#     text-decoration: none;
-#     color: #f2f4f6 !important;
-# }
-
-# .mantine-Navbar-root ::marker{
-#     display: none;
-# }

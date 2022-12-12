@@ -1,11 +1,12 @@
 from dash import Dash, dash, dcc, html
 import dash_mantine_components as dmc
+import utils as u
 
 app = Dash(__name__,
-            external_scripts=[{
-                "src": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js",
-                "crossorigin": "anonymous"
-            }],
+           external_scripts=[{
+               "src": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js",
+               "crossorigin": "anonymous"
+           }],
            suppress_callback_exceptions=True,
            use_pages=True)
 
@@ -16,11 +17,33 @@ head = dmc.Header(
     p="sm",
     mb="1rem",
     children=[
-        dmc.Text(
-            "Dash Mantine & Dash Bootstrap Components Building Blocks",
-            size="xl",
-            color="gray",
-        )
+        dmc.Grid([
+            dmc.Col(
+                dmc.Text(
+                    "Dash Mantine & Dash Bootstrap Building Blocks",
+                    size="xl",
+                    color="gray",
+                ), span=10, p='sm'),
+            dmc.Col(
+                dmc.Group([
+                    dmc.Anchor(
+                        dmc.Avatar(
+                            src="/assets/mantine.png"
+                        ),
+                        href="https://www.dash-mantine-components.com/",
+                        pl='1rem',
+                        target='_blank'
+                    ),
+                    dmc.Anchor(
+                        dmc.Avatar(
+                            src="/assets/dbc.png"
+                        ),
+                        href="https://dash-bootstrap-components.opensource.faculty.ai",
+                        pl='1rem',
+                        target='_blank'
+                    )
+                ], mt='6px'), span=2, p=0)
+        ])
     ])
 
 app.layout = dmc.MantineProvider(
@@ -40,52 +63,20 @@ app.layout = dmc.MantineProvider(
             pb='1rem'
         ),
         html.Div([
-        dmc.Center([
-            dmc.Anchor(
-                dmc.Tooltip(
-                    label="snehilvj",
-                    withArrow=True,
-                    transition="pop-top-right",
-                    transitionDuration=300,
-                    children=[
-                        dmc.Image(
-                            src="https://github.com/snehilvj.png",
-                            width="50px"
-                        )]),
-                href="https://github.com/snehilvj"
-            ),
-            dmc.Anchor(
-                dmc.Tooltip(
-                    label="snehilvj",
-                    withArrow=True,
-                    transition="pop-top-right",
-                    transitionDuration=300,
-                    children=[
-                        dmc.Image(
-                            src="https://github.com/AnnMarieW.png",
-                            width="50px"
-                        )]),
-                href="https://github.com/AnnMarieW",
-                pl='1rem'
-            )
-        ]),
-        dmc.Center([
-            dmc.Text(
-                "Special thanks to @snehilvj & @AnnMarieW for making DMC and DBC!",
-                pt='1rem'
-            )
-        ])
-    ], className="footer")
+            dmc.Center(id='contributors', children=u.build_contributors()),
+            dmc.Center([
+                dmc.Text(
+                    "Contributors",
+                    pt='1rem'
+                )
+            ])
+        ], className="footer")
     ],
 )
-
 
 server = app.server
 
 if __name__ == '__main__':
     app.run_server(
-        # host='0.0.0.0',
-        # port='8050',
-        # debug=True,
-        # dev_tools_props_check=True
+        debug=True
     )

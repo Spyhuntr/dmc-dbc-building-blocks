@@ -3,9 +3,8 @@ import dash
 from dash import callback, Output, Input, State, MATCH, html, ctx, dcc
 import dash_mantine_components as dmc
 import utils as u
-import pyperclip as clip
 
-dash.register_page(__name__, path='/app_cards', title='Home')
+dash.register_page(__name__, path='/app_cards', title='Cards')
 
 card_desc = [
     {"header": "Card with Embedded Chart", "user": "spyhuntr",
@@ -21,7 +20,7 @@ layout = dmc.Grid(
     children=[
         dmc.Col(
             dcc.Link(
-                id='back_btn',
+                id='cards-back_btn',
                 href="/",
                 children=[
                     dmc.Button("< Back to all categories", variant="outline")
@@ -31,18 +30,18 @@ layout = dmc.Grid(
             dmc.Title(f"Application Cards", order=1)
         ),
         dmc.Col(
-            id="sample-container",
+            id="cards-sample-container",
             children=[]
         )
     ])
 
 
 @callback(
-    Output('sample-container', 'children'),
+    Output('cards-sample-container', 'children'),
     [Input('url', 'pathname'),
-    Input('sample-container', 'children')]
+     Input('cards-sample-container', 'children')]
 )
-def build_layout(url, children):
+def build_layout(_, children):
 
     if ctx.triggered_id == 'url':
         return None
@@ -61,33 +60,11 @@ def build_layout(url, children):
                         dmc.Grid(
                             children=[
                                 u.card_hdr(
-                                    sample["header"], sample["user"], key),
-                                dmc.Col(
-                                    dmc.Tooltip(
-                                        id={
-                                            "type": "copy-tooltip",
-                                            "index": key
-                                        },
-                                        label="Copy Code",
-                                        transition="pop-top-right",
-                                        transitionDuration=300,
-                                        withArrow=True,
-                                        children=[
-                                            dmc.ActionIcon(
-                                                html.I(
-                                                    className="fa-regular fa-clipboard fa-lg"),
-                                                id={
-                                                    "type": "copy-icon",
-                                                    "index": key
-                                                },
-
-                                                color='gray'
-                                            )]), span='content'
-                                ),
+                                    sample["header"], sample["user"]),
                                 dmc.Col(
                                     dmc.Switch(
                                         id={
-                                            "type": "code-switch",
+                                            "type": "cards-code-switch",
                                             "index": key
                                         },
                                         size="xl",
@@ -97,15 +74,13 @@ def build_layout(url, children):
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
 
-                dmc.Center([dmc.Container(id={
-                    "type": "rendering",
-                    "index": key
-                }, p="xl")]),
-
-                html.Div(id={
-                    "type": "copy-code-div",
-                    "index": key
-                }, children=[])
+                html.Div(
+                    id={
+                        "type": "cards-rendering",
+                        "index": key
+                    },
+                    children=[]
+                )
             ]
         )
 
@@ -115,33 +90,22 @@ def build_layout(url, children):
 
 
 @callback(
-    Output({'type': 'rendering', 'index': MATCH}, 'children'),
+    Output({'type': 'cards-rendering', 'index': MATCH}, 'children'),
     [Input('url', 'pathname'),
-     Input({'type': 'code-switch', 'index': MATCH}, 'checked')],
-    State({'type': 'code-switch', 'index': MATCH}, 'id')
+     Input({'type': 'cards-code-switch', 'index': MATCH}, 'checked')],
+    State({'type': 'cards-code-switch', 'index': MATCH}, 'id')
 )
-def state_change(url, switch, id):
+def state_change(_, switch, id):
 
     if switch:
         with open(card_desc[id["index"]]["code"], "r") as file:
             code = file.read()
 
-            return u.build_code(code)
+
+        return dmc.Prism(
+            language='python',
+            children=code
+        )
     else:
-        return dmc.Image(src=card_desc[id["index"]]["image"], width=600)
+        return dmc.Center(dmc.Image(src=card_desc[id["index"]]["image"], width=600), p='xl')
 
-
-@callback(
-    Output({'type': 'copy-code-div', 'index': MATCH}, 'children'),
-    [Input('url', 'pathname'),
-     Input({'type': 'copy-icon', 'index': MATCH}, 'n_clicks')],
-    State({'type': 'copy-icon', 'index': MATCH}, 'id')
-)
-def copy_code(url, clicks, id):
-
-    with open(card_desc[id["index"]]["code"], "r") as file:
-        code = file.read()
-
-    clip.copy(code)
-
-    return None

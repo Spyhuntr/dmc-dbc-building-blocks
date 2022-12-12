@@ -3,16 +3,19 @@ import dash
 from dash import callback, Output, Input, State, MATCH, html, ctx, dcc
 import dash_mantine_components as dmc
 import utils as u
-import pyperclip as clip
 
 dash.register_page(__name__, path='/navbars', title='Home')
 
 card_desc = [
     {"header": "Hover Navbar", "user": "Sohibjon",
-     "code": "./rendered_code/hover_navbar.py", "image": "/assets/hover_navbar.gif"
+     "code": ["./rendered_code/hover_navbar.py",
+              "./rendered_code/hover_navbar.css"],
+     "image": "/assets/hover_navbar.gif"
      },
     {"header": "Responsive Navbar", "user": "spyhuntr",
-     "code": "./rendered_code/responsive_navbar.py", "image": "/assets/responsive_navbar.gif"
+     "code": ["./rendered_code/responsive_navbar.py",
+              "./rendered_code/responsive_navbar.css"],
+     "image": "/assets/responsive_navbar.gif"
      }
 ]
 
@@ -21,7 +24,7 @@ layout = dmc.Grid(
     children=[
         dmc.Col(
             dcc.Link(
-                id='back_btn',
+                id='navbars-back-btn',
                 href="/",
                 children=[
                     dmc.Button("< Back to all categories", variant="outline")
@@ -31,16 +34,16 @@ layout = dmc.Grid(
             dmc.Title(f"Navbars", order=1)
         ),
         dmc.Col(
-            id="navbar-sample-container",
+            id="navbars-sample-container",
             children=[]
         )
     ])
 
 
 @callback(
-    Output('navbar-sample-container', 'children'),
+    Output('navbars-sample-container', 'children'),
     [Input('url', 'pathname'),
-    Input('navbar-sample-container', 'children')]
+     Input('navbars-sample-container', 'children')]
 )
 def build_layout(url, children):
 
@@ -61,33 +64,11 @@ def build_layout(url, children):
                         dmc.Grid(
                             children=[
                                 u.card_hdr(
-                                    sample["header"], sample["user"], key),
-                                dmc.Col(
-                                    dmc.Tooltip(
-                                        id={
-                                            "type": "navbar-copy-tooltip",
-                                            "index": key
-                                        },
-                                        label="Copy Code",
-                                        transition="pop-top-right",
-                                        transitionDuration=300,
-                                        withArrow=True,
-                                        children=[
-                                            dmc.ActionIcon(
-                                                html.I(
-                                                    className="fa-regular fa-clipboard fa-lg"),
-                                                id={
-                                                    "type": "navbar-copy-icon",
-                                                    "index": key
-                                                },
-
-                                                color='gray'
-                                            )]), span='content'
-                                ),
+                                    sample["header"], sample["user"]),
                                 dmc.Col(
                                     dmc.Switch(
                                         id={
-                                            "type": "navbar-code-switch",
+                                            "type": "navbars-code-switch",
                                             "index": key
                                         },
                                         size="xl",
@@ -96,15 +77,14 @@ def build_layout(url, children):
                                     ), span='content', style={"marginTop": "-21px"}),
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
-                dmc.Center([dmc.Container(id={
-                    "type": "navbar-rendering",
-                    "index": key
-                }, p="xl")]),
 
-                html.Div(id={
-                    "type": "navbar-copy-code-div",
-                    "index": key
-                }, children=[])
+                html.Div(
+                    id={
+                        "type": "navbars-rendering",
+                        "index": key
+                    },
+                    children=[]
+                )
             ]
         )
 
@@ -114,34 +94,39 @@ def build_layout(url, children):
 
 
 @callback(
-    Output({'type': 'navbar-rendering', 'index': MATCH}, 'children'),
+    Output({'type': 'navbars-rendering', 'index': MATCH}, 'children'),
     [Input('url', 'pathname'),
-     Input({'type': 'navbar-code-switch', 'index': MATCH}, 'checked')],
-    State({'type': 'navbar-code-switch', 'index': MATCH}, 'id')
+     Input({'type': 'navbars-code-switch', 'index': MATCH}, 'checked')],
+    State({'type': 'navbars-code-switch', 'index': MATCH}, 'id')
 )
 def state_change(url, switch, id):
 
     if switch:
-        with open(card_desc[id["index"]]["code"], "r") as file:
-            code = file.read()
+        files = card_desc[id["index"]]['code']
 
-            return u.build_code(code)
+        with open(files[0], "r") as py, open(files[1], "r") as css:
+            py_file = py.read()
+            css_file = css.read()
+
+        return html.Div([
+            dmc.Grid([
+                dmc.Col([
+                    dmc.Text("Python", p="xs"),
+                    dmc.Prism(
+                        language='python',
+                        children=py_file, 
+                        style={'border': '1px solid #ececec'}
+                    )], span=6),
+                dmc.Col([
+                    dmc.Text("CSS", p="xs"),
+                    dmc.Prism(
+                        language='css',
+                        children=css_file, 
+                        style={'border': '1px solid #ececec'}
+                    )], span=6)
+            ], gutter=0)
+        ])
+
     else:
-        return dmc.Image(src=card_desc[id["index"]]["image"], width=600)
 
-
-@callback(
-    Output({'type': 'navbar-copy-code-div', 'index': MATCH}, 'children'),
-    [Input('url', 'pathname'),
-     Input({'type': 'navbar-copy-icon', 'index': MATCH}, 'n_clicks')],
-    State({'type': 'navbar-copy-icon', 'index': MATCH}, 'id')
-)
-def copy_code(url, clicks, id):
-
-    with open(card_desc[id["index"]]["code"], "r") as file:
-        code = file.read()
-
-    clip.copy(code)
-
-    return None
-
+        return dmc.Center(dmc.Image(src=card_desc[id["index"]]["image"], width=600), p='xl')

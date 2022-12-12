@@ -3,7 +3,7 @@ import dash
 from dash import html
 import dash_mantine_components as dmc
 
-dash.register_page(__name__, path='/', title='Home')
+dash.register_page(__name__, path='/', title='DMC/DBC Home')
 
 layout = dmc.Grid(
     children=[
@@ -24,7 +24,7 @@ layout = dmc.Grid(
                                 pl="md"
                             ),
                             dmc.Text(
-                                "2 Component",
+                                "2 Components",
                                 size="xs",
                                 pl="md",
                                 pb="md",
@@ -55,7 +55,7 @@ layout = dmc.Grid(
                                 pl="md"
                             ),
                             dmc.Text(
-                                "2 Component",
+                                "2 Components",
                                 size="xs",
                                 pl="md",
                                 pb="md",
