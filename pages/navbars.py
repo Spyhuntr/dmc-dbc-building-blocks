@@ -114,15 +114,16 @@ def state_change(url, switch, id):
                     dmc.Text("Python", p="xs"),
                     dmc.Prism(
                         language='python',
-                        children=py_file, 
+                        children=py_file,
                         style={'border': '1px solid #ececec'},
                         mr='1rem'
                     )], span=6),
                 dmc.Col([
-                    dmc.Text("CSS", p="xs"),
+                    dmc.Group([dmc.Text("CSS"), dmc.Text(
+                        "Add to ./assets/style.css in your app", size='sm', color='grey')], p='xs'),
                     dmc.Prism(
                         language='css',
-                        children=css_file, 
+                        children=css_file,
                         style={'border': '1px solid #ececec'}
                     )], span=6)
             ], gutter=0)

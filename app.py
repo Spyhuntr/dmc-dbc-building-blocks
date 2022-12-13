@@ -20,11 +20,15 @@ head = dmc.Header(
         dmc.Grid([
             dmc.Col([
                 dmc.MediaQuery([
+                    dmc.Group([
+                    dmc.Image(
+                        src="/assets/logo.png", width=50
+                    ),
                     dmc.Text(
                         "Dash Mantine & Dash Bootstrap Building Blocks",
                         size="xl",
                         color="gray",
-                    )
+                    )], p=0, m=0)
                 ], smallerThan='md', styles={'display': 'none'}),
                 dmc.MediaQuery([
                     dmc.Text(
@@ -33,7 +37,7 @@ head = dmc.Header(
                         color="gray",
                     )
                 ], largerThan='md', styles={'display': 'none'})],
-            span=10, p='sm'),
+                span=10, p='sm'),
             dmc.Col(
                 dmc.Group([
                     dmc.Anchor(
