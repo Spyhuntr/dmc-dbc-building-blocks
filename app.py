@@ -18,12 +18,22 @@ head = dmc.Header(
     mb="1rem",
     children=[
         dmc.Grid([
-            dmc.Col(
-                dmc.Text(
-                    "Dash Mantine & Dash Bootstrap Building Blocks",
-                    size="xl",
-                    color="gray",
-                ), span=10, p='sm'),
+            dmc.Col([
+                dmc.MediaQuery([
+                    dmc.Text(
+                        "Dash Mantine & Dash Bootstrap Building Blocks",
+                        size="xl",
+                        color="gray",
+                    )
+                ], smallerThan='md', styles={'display': 'none'}),
+                dmc.MediaQuery([
+                    dmc.Text(
+                        "DMC & DBC",
+                        size="xl",
+                        color="gray",
+                    )
+                ], largerThan='md', styles={'display': 'none'})],
+            span=10, p='sm'),
             dmc.Col(
                 dmc.Group([
                     dmc.Anchor(
@@ -58,9 +68,9 @@ app.layout = dmc.MantineProvider(
         dmc.Container(
             [dash.page_container],
             id="page-container",
-            size='xl',
             style={'minWidth': '800px'},
-            pb='1rem'
+            pb='1rem',
+            size='xl'
         ),
         html.Div([
             dmc.Center(id='contributors', children=u.build_contributors()),

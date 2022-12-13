@@ -115,7 +115,8 @@ def state_change(url, switch, id):
                     dmc.Prism(
                         language='python',
                         children=py_file, 
-                        style={'border': '1px solid #ececec'}
+                        style={'border': '1px solid #ececec'},
+                        mr='1rem'
                     )], span=6),
                 dmc.Col([
                     dmc.Text("CSS", p="xs"),
