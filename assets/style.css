@@ -16,3 +16,7 @@
 .card-hdr:hover {
     transform: scale(1.05);
 }
+
+#home_logo img {
+    transform: rotate(-35deg);
+}
