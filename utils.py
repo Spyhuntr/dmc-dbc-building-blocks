@@ -91,9 +91,9 @@ def create_presigned_post(bucket_name, object_name):
 def upload_file(contents, filename, date):
 
     result = create_presigned_post("dmc-dbc-building-blocks", filename)
+    if result is not None:
+        #Upload file to S3 using presigned URL
+        files = {'file': filename}
+        r = requests.post(result['url'], data=result['fields'], files=files)
 
-    #Upload file to S3 using presigned URL
-    files = {'file': filename}
-    r = requests.post(result['url'], data=result['fields'], files=files)
-
-    return r
+        return r

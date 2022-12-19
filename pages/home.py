@@ -178,12 +178,14 @@ def update_output(content, name, date):
     # Now you can use ZipFile to take the BytesIO output
     zip_obj = zipfile.ZipFile(zip_str, 'r')
     message = upload_file(zip_obj, name, date)
-    if message.status_code == 204:
-        return dmc.Notification(
-            id="simple-notify",
-            action="show",
-            message="File successfully uploaded!",
-            icon=html.I(className='fas fa-check fa-lg fa-fw')
-    )
-    else:
-        return f"{message.status_code} - {message.reason}"
+
+    if message is not None:
+        if message.status_code == 204:
+            return dmc.Notification(
+                id="simple-notify",
+                action="show",
+                message="File successfully uploaded!",
+                icon=html.I(className='fas fa-check fa-lg fa-fw')
+        )
+        else:
+            return f"{message.status_code} - {message.reason}"
