@@ -2,3 +2,4 @@ boto3==1.26.32
 dash==2.7.0
 dash-mantine-components==0.11.0a3
 gunicorn==20.1.0
+requests==2.22.0
