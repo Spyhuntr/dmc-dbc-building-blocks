@@ -1,5 +1,8 @@
-
+import boto3
 import dash_mantine_components as dmc
+import logging
+from botocore.exceptions import ClientError
+import requests
 
 def card_hdr(title: str, user: str):
 
@@ -52,3 +55,45 @@ def build_contributors():
         contrib_group.append(new_link)
 
     return contrib_group
+
+
+def create_presigned_post(bucket_name, object_name):
+    """Generate a presigned URL S3 POST request to upload a file
+
+    :param bucket_name: string
+    :param object_name: string
+    :param fields: Dictionary of prefilled form fields
+    :param conditions: List of conditions to include in the policy
+    :param expiration: Time in seconds for the presigned URL to remain valid
+    :return: Dictionary with the following keys:
+        url: URL to post to
+        fields: Dictionary of form fields and values to submit with the POST
+    :return: None if error.
+    """
+
+    # Generate a presigned S3 POST URL
+    s3_client = boto3.client('s3')
+
+    try:
+        response = s3_client.generate_presigned_post(bucket_name,
+                                                     object_name,
+                                                     Fields=None,
+                                                     Conditions=None,
+                                                     ExpiresIn=3600)
+    except ClientError as e:
+        logging.error(e)
+        return None
+
+    # The response contains the presigned URL and required fields
+    return response
+
+
+def upload_file(contents, filename, date):
+
+    result = create_presigned_post("dmc-dbc-building-blocks", filename)
+
+    #Upload file to S3 using presigned URL
+    files = {'file': filename}
+    r = requests.post(result['url'], data=result['fields'], files=files)
+
+    return r
