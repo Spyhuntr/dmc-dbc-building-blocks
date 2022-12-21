@@ -3,9 +3,7 @@ import dash
 from dash import html, dcc, Output, Input, callback, State
 import dash_mantine_components as dmc
 from utils import upload_file
-import io
 import base64
-import zipfile
 
 dash.register_page(__name__, path='/', title='DMC/DBC Home')
 
@@ -21,10 +19,13 @@ layout = html.Div([
                         color="gray",
                         style={'textAlign': 'center'}
                     ),
+                    dmc.Text("Contribute Building Block",
+                             color="gray",
+                             style={'textAlign': 'center'}),
                     dmc.Group([
                         dcc.Link(
                             id='github-btn',
-                            href="https://github.com/Spyhuntr/dmc-dbc-building-blocks",
+                            href="https://github.com/Spyhuntr/dmc-dbc-building-blocks/issues/1#issue-1506988208",
                             target='_blank',
                             children=[
                                 dmc.Button(
@@ -34,7 +35,7 @@ layout = html.Div([
                                 )
                             ]),
                         dmc.Button(
-                            "Add Building Block",
+                            "Upload",
                             id='add-building-block-btn',
                             rightIcon=html.I(
                                 className='fas fa-upload fa-lg fa-fw'),
@@ -119,16 +120,26 @@ layout = html.Div([
         transition='slide-down',
         transitionDuration=400,
         children=[
-            dmc.Text("Upload a zip file of your code.  Include your github handle in the file name"
-                     " so I can give you credit on the site for your building block.  "
+            dmc.LoadingOverlay([
+            dmc.Text("Upload a zip file of your code.  The filename should include your github handle "
+                     " if you would like to get credit for your building block.  "
                      "I will get a notification when new building blocks have been submitted.",
+                     color="gray",
+                     style={'textAlign': 'center'}),
+            dmc.Space(h=10),
+            dmc.Text("What are building blocks?",
+                     color="gray",
+                     style={'textAlign': 'center'}),
+            dmc.Text("Building blocks are small UI components that are part of an app.  "
+                     "These building blocks are not a full app but rather can be added into an "
+                     "existing app to enhance the UI/UX experience of your dash application.",
                      color="gray",
                      style={'textAlign': 'center'}),
             dmc.Space(h=20),
             dcc.Upload(
                 id='upload',
                 max_size=3145728,
-                accept='.zip',
+                accept='.zip,.py,.css',
                 children=html.Div([
                     'Drag and Drop or ',
                     dmc.Anchor(
@@ -146,7 +157,8 @@ layout = html.Div([
             ),
             html.Div(id='output-upload')
         ],
-    )]
+    )])
+    ]
 
 
 )
@@ -173,19 +185,17 @@ def update_output(content, name, date):
     content_type, content_string = content.split(',')
     # Decode the base64 string
     content_decoded = base64.b64decode(content_string)
-    # Use BytesIO to handle the decoded content
-    zip_str = io.BytesIO(content_decoded)
-    # Now you can use ZipFile to take the BytesIO output
-    zip_obj = zipfile.ZipFile(zip_str, 'r')
-    message = upload_file(zip_obj, name, date)
+
+    message = upload_file(content_decoded, name, date)
 
     if message is not None:
         if message.status_code == 204:
             return dmc.Notification(
-                id="simple-notify",
+                id="upload-notify",
                 action="show",
                 message="File successfully uploaded!",
-                icon=html.I(className='fas fa-check fa-lg fa-fw')
-        )
+                icon=html.I(className='fas fa-check fa-lg fa-fw'),
+                color='green'
+            )
         else:
             return f"{message.status_code} - {message.reason}"
