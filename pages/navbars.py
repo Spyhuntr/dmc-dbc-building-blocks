@@ -5,22 +5,10 @@ import dash_mantine_components as dmc
 import utils as u
 
 dash.register_page(__name__, path='/navbars', title='Home')
-
-card_desc = [
-    {"header": "Hover Navbar", "user": "Sohibjon",
-     "code": ["./rendered_code/hover_navbar.py",
-              "./rendered_code/hover_navbar.css"],
-     "image": "/assets/hover_navbar.gif"
-     },
-    {"header": "Responsive Navbar", "user": "spyhuntr",
-     "code": ["./rendered_code/responsive_navbar.py",
-              "./rendered_code/responsive_navbar.css"],
-     "image": "/assets/responsive_navbar.gif"
-     }
-]
+prefix = 'examples/navbars/'
 
 
-layout = dmc.Grid(
+layout = dmc.LoadingOverlay([dmc.Grid(
     children=[
         dmc.Col(
             dcc.Link(
@@ -37,7 +25,7 @@ layout = dmc.Grid(
             id="navbars-sample-container",
             children=[]
         )
-    ])
+    ])])
 
 
 @callback(
@@ -45,12 +33,13 @@ layout = dmc.Grid(
     [Input('url', 'pathname'),
      Input('navbars-sample-container', 'children')]
 )
-def build_layout(url, children):
+def build_layout(_, children):
 
     if ctx.triggered_id == 'url':
         return None
 
-    for key, sample in enumerate(card_desc):
+    for key, card_info in enumerate(u.get_example_files(prefix)):
+
         new_sample = dmc.Paper(
             withBorder=True,
             radius="md",
@@ -64,7 +53,7 @@ def build_layout(url, children):
                         dmc.Grid(
                             children=[
                                 u.card_hdr(
-                                    sample["header"], sample["user"]),
+                                    card_info['card_heading'], card_info['user']),
                                 dmc.Col(
                                     dmc.Switch(
                                         id={
@@ -99,15 +88,26 @@ def build_layout(url, children):
      Input({'type': 'navbars-code-switch', 'index': MATCH}, 'checked')],
     State({'type': 'navbars-code-switch', 'index': MATCH}, 'id')
 )
-def state_change(url, switch, id):
+def state_change(_, switch, id):
+
+    card_dict = u.get_example_files(prefix)
+
+    py_file = None
+    css_file = None
+    img_file = None
+    for name in card_dict[id['index']]['file'].namelist():
+
+        if name.endswith('py'):
+            py_file = card_dict[id['index']]['file'].read(name).decode('utf-8')
+
+        if name.endswith('css'):
+            css_file = card_dict[id['index']]['file'].read(
+                name).decode('utf-8')
+
+    img_file = 'https://dmc-dbc-building-blocks.s3.amazonaws.com/examples/navbars/images/' + \
+        card_dict[id['index']]['image']
 
     if switch:
-        files = card_desc[id["index"]]['code']
-
-        with open(files[0], "r") as py, open(files[1], "r") as css:
-            py_file = py.read()
-            css_file = css.read()
-
         return html.Div([
             dmc.Grid([
                 dmc.Col([
@@ -128,7 +128,5 @@ def state_change(url, switch, id):
                     )], span=6)
             ], gutter=0)
         ])
-
     else:
-
-        return dmc.Center(dmc.Image(src=card_desc[id["index"]]["image"], width=600), p='xl')
+        return dmc.Center(dmc.Image(src=img_file, width=600), p='xl')

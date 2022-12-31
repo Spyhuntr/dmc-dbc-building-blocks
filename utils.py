@@ -3,6 +3,10 @@ import dash_mantine_components as dmc
 import logging
 from botocore.exceptions import ClientError
 import requests
+from zipfile import ZipFile
+import io
+
+bucket = 'dmc-dbc-building-blocks'
 
 def card_hdr(title: str, user: str):
 
@@ -62,8 +66,6 @@ def create_presigned_post(bucket_name, object_name):
 
     :param bucket_name: string
     :param object_name: string
-    :param fields: Dictionary of prefilled form fields
-    :param conditions: List of conditions to include in the policy
     :param expiration: Time in seconds for the presigned URL to remain valid
     :return: Dictionary with the following keys:
         url: URL to post to
@@ -88,7 +90,7 @@ def create_presigned_post(bucket_name, object_name):
 
 def upload_file(contents, filename, date):
 
-    result = create_presigned_post("dmc-dbc-building-blocks", filename)
+    result = create_presigned_post(bucket, filename)
 
     if result is not None:
         #Upload file to S3 using presigned URL
@@ -96,3 +98,40 @@ def upload_file(contents, filename, date):
         r = requests.post(result['url'], data=result['fields'], files=files)
 
         return r
+
+
+def get_example_files(prefix):
+
+    s3_client = boto3.client('s3')
+    
+    example_files = s3_client.list_objects_v2(
+        Bucket=bucket,
+        Prefix=prefix,
+        Delimiter='/'
+    )
+
+    file_list=[]
+    for obj in example_files.get('Contents'):
+        
+        if obj['Size'] > 0:
+            key=obj.get('Key')
+
+            #sample file
+            file = s3_client.get_object(Bucket=bucket, Key=key)
+            #meta data on the file that has user-id etc on it
+            header = s3_client.head_object(Bucket=bucket, Key=key)
+            
+            f = ZipFile(io.BytesIO(file['Body'].read()), 'r')
+            user = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-userid']
+            card_heading = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-header']
+            image_file = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-image']
+
+            file_payload = {'file': f, 'user': user, 'card_heading': card_heading, 'image': image_file}
+
+            file_list.append(file_payload)
+
+    return file_list
+
+    
+
+            

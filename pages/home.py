@@ -68,7 +68,7 @@ layout = html.Div([
                                     pl="md"
                                 ),
                                 dmc.Text(
-                                    "2 Components",
+                                    "3 Components",
                                     size="xs",
                                     pl="md",
                                     pb="md",
