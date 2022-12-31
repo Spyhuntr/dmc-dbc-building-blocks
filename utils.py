@@ -90,7 +90,7 @@ def create_presigned_post(bucket_name, object_name):
 
 def upload_file(contents, filename, date):
 
-    result = create_presigned_post(bucket, filename)
+    result = create_presigned_post(bucket, 'uploads/' + filename)
 
     if result is not None:
         #Upload file to S3 using presigned URL
