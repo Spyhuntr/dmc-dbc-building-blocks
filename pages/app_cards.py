@@ -5,18 +5,10 @@ import dash_mantine_components as dmc
 import utils as u
 
 dash.register_page(__name__, path='/app_cards', title='Cards')
-
-card_desc = [
-    {"header": "Card with Embedded Chart", "user": "spyhuntr",
-     "code": "./rendered_code/card_embedded_chart.py", "image": "/assets/card_embedded_chart_img.png"
-     },
-    {"header": "KPI Card Group", "user": "AnnMarieW",
-     "code": "./rendered_code/card_group.py", "image": "/assets/card_group_kpi.png"
-     }
-]
+prefix = 'examples/cards/'
 
 
-layout = dmc.Grid(
+layout = dmc.LoadingOverlay([dmc.Grid(
     children=[
         dmc.Col(
             dcc.Link(
@@ -33,7 +25,7 @@ layout = dmc.Grid(
             id="cards-sample-container",
             children=[]
         )
-    ])
+    ])])
 
 
 @callback(
@@ -46,7 +38,7 @@ def build_layout(_, children):
     if ctx.triggered_id == 'url':
         return None
 
-    for key, sample in enumerate(card_desc):
+    for key, card_info in enumerate(u.get_example_files(prefix)):
         new_sample = dmc.Paper(
             withBorder=True,
             radius="md",
@@ -60,7 +52,7 @@ def build_layout(_, children):
                         dmc.Grid(
                             children=[
                                 u.card_hdr(
-                                    sample["header"], sample["user"]),
+                                    card_info['card_heading'], card_info['user']),
                                 dmc.Col(
                                     dmc.Switch(
                                         id={
@@ -95,17 +87,24 @@ def build_layout(_, children):
      Input({'type': 'cards-code-switch', 'index': MATCH}, 'checked')],
     State({'type': 'cards-code-switch', 'index': MATCH}, 'id')
 )
-def state_change(_, switch, id):
+def build_examples(_, switch, id):
 
-    if switch:
-        with open(card_desc[id["index"]]["code"], "r") as file:
-            code = file.read()
+    card_dict = u.get_example_files(prefix)
 
+    for name in card_dict[id['index']]['file'].namelist():
 
-        return dmc.Prism(
-            language='python',
-            children=code
-        )
-    else:
-        return dmc.Center(dmc.Image(src=card_desc[id["index"]]["image"], width=600), p='xl')
+        if switch:
 
+            if name.endswith(('py', 'css')):
+                return dmc.Prism(
+                    language='python',
+                    children=card_dict[id['index']]['file'].read(
+                        name).decode('utf-8')
+                )
+
+        else:
+
+            img_file = 'https://dmc-dbc-building-blocks.s3.amazonaws.com/examples/cards/images/' + \
+                card_dict[id['index']]['image']
+
+            return dmc.Center(dmc.Image(src=img_file, width=600), p='xl')

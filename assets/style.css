@@ -20,3 +20,7 @@
 #home_logo img {
     transform: rotate(-35deg);
 }
+
+.mantine-LoadingOverlay-root{
+    position: fixed;
+}
