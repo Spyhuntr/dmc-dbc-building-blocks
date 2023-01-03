@@ -2,13 +2,14 @@
 import dash
 from dash import html, dcc, Output, Input, callback, State
 import dash_mantine_components as dmc
-from utils import upload_file
+from utils import upload_file, file_listings
 import base64
 
 dash.register_page(__name__, path='/', title='DMC/DBC Home')
 
 layout = html.Div([
     dmc.Grid(
+        id='card-grid',
         children=[
             dmc.Col([
                 dmc.Stack([
@@ -50,69 +51,7 @@ layout = html.Div([
                     width=150,
                     className='animate__animated animate__fadeInTopRight',
                 )
-            ], span=2, offset=1),
-            dmc.Col([
-                dmc.Paper(
-                    children=[
-                        dmc.Anchor(
-                            href="/app_cards",
-                            children=[
-                                html.Div(
-                                    dmc.Image(
-                                        src="/assets/cards-light.svg",
-                                    ), className='card-hdr'
-                                ),
-                                dmc.Text(
-                                    "Application Cards",
-                                    pt="md",
-                                    pl="md"
-                                ),
-                                dmc.Text(
-                                    "3 Components",
-                                    size="xs",
-                                    pl="md",
-                                    pb="md",
-                                    color="#868e96"
-                                )
-                            ],
-                            variant="text"
-                        )],
-                    shadow="xl",
-                    withBorder=True,
-                    radius="md",
-                    style={"overflow": "hidden"}
-                )], span=3),
-            dmc.Col([
-                dmc.Paper(
-                    children=[
-                        dmc.Anchor(
-                            href="/navbars",
-                            children=[
-                                html.Div(
-                                    dmc.Image(
-                                        src="/assets/navbars-light.svg",
-                                    ), className='card-hdr'
-                                ),
-                                dmc.Text(
-                                    "Navbars",
-                                    pt="md",
-                                    pl="md"
-                                ),
-                                dmc.Text(
-                                    "2 Components",
-                                    size="xs",
-                                    pl="md",
-                                    pb="md",
-                                    color="#868e96"
-                                )
-                            ],
-                            variant="text"
-                        )],
-                    shadow="xl",
-                    withBorder=True,
-                    radius="md",
-                    style={"overflow": "hidden"}
-                )], span=3)
+            ], span=2, offset=1)
         ]),
     dmc.Modal(
         id="upload-modal",
@@ -159,9 +98,56 @@ layout = html.Div([
         ],
     )])
     ]
-
-
 )
+
+
+@callback(Output('card-grid', 'children'),
+          Input('card-grid', 'children'),
+          State('card-grid', 'children'),
+          )
+def create_cards(_, children):
+
+    card_info = [
+        {'image': '/assets/cards-light.svg', 'title': 'Application Cards', 'page': '/app_cards', 'prefix': 'examples/cards/'},
+        {'image': '/assets/navbars-light.svg', 'title': 'Navbars', 'page': '/navbars', 'prefix': 'examples/navbars/'},
+        {'image': '/assets/footers-light.svg', 'title': 'Footers', 'page': '/footers', 'prefix': 'examples/footers/'}
+    ]
+
+    for card in card_info:
+        card = dmc.Col([
+            dmc.Paper(
+                children=[
+                    dmc.Anchor(
+                        href=card['page'],
+                        children=[
+                            html.Div(
+                                dmc.Image(
+                                    src=card['image'],
+                                ), className='card-hdr'
+                            ),
+                            dmc.Text(
+                                card['title'],
+                                pt="md",
+                                pl="md"
+                            ),
+                            dmc.Text(
+                                f"{file_listings(card['prefix'])} Components",
+                                size="xs",
+                                pl="md",
+                                pb="md",
+                                color="#868e96"
+                            )
+                        ],
+                        variant="text"
+                    )],
+                shadow="xl",
+                withBorder=True,
+                radius="md",
+                style={"overflow": "hidden"}
+            )], span=3)
+        children.append(card)
+
+    return children
 
 
 @callback(
@@ -171,7 +157,8 @@ layout = html.Div([
 )
 def open_modal(_):
 
-    return True
+    if _ is not None:
+        return True
 
 
 @callback(Output('output-upload', 'children'),
