@@ -132,6 +132,21 @@ def get_example_files(prefix):
 
     return file_list
 
-    
 
-            
+def file_listings(prefix):
+
+    s3_client = boto3.client('s3')
+    
+    num_files = 0
+
+    example_files = s3_client.list_objects_v2(
+        Bucket=bucket,
+        Prefix=prefix,
+        Delimiter='/'
+    )['Contents']
+    
+    for content in example_files:
+        if content['Size'] > 0:
+            num_files += 1
+
+    return num_files
