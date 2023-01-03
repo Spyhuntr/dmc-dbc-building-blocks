@@ -8,6 +8,7 @@ import base64
 dash.register_page(__name__, path='/', title='DMC/DBC Home')
 
 layout = html.Div([
+    dmc.LoadingOverlay([
     dmc.Grid(
         id='card-grid',
         children=[
@@ -53,6 +54,7 @@ layout = html.Div([
                 )
             ], span=2, offset=1)
         ]),
+    ]),
     dmc.Modal(
         id="upload-modal",
         size='xl',
