@@ -112,7 +112,9 @@ def create_cards(_, children):
     card_info = [
         {'image': '/assets/cards-light.svg', 'title': 'Application Cards', 'page': '/app_cards', 'prefix': 'examples/cards/'},
         {'image': '/assets/navbars-light.svg', 'title': 'Navbars', 'page': '/navbars', 'prefix': 'examples/navbars/'},
-        {'image': '/assets/footers-light.svg', 'title': 'Footers', 'page': '/footers', 'prefix': 'examples/footers/'}
+        {'image': '/assets/footers-light.svg', 'title': 'Footers', 'page': '/footers', 'prefix': 'examples/footers/'},
+        {'image': '/assets/headers-light.svg', 'title': 'Headers', 'page': '/headers', 'prefix': 'examples/headers/'}
+
     ]
 
     for card in card_info:
