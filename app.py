@@ -48,7 +48,6 @@ app.layout = dmc.MantineProvider(
             dmc.Container(
                 [dash.page_container],
                 id="page-container",
-                style={'minWidth': '800px'},
                 pb='1rem',
                 size='xl'
             ),

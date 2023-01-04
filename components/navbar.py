@@ -26,7 +26,7 @@ head = dmc.Header(
                         color="gray",
                     )
                 ], largerThan='md', styles={'display': 'none'})],
-                span=10, lg=10, md=10, sm=11, xs=11, p='sm'),
+                span=11, xs=11, sm=11, md=10, lg=10, p='sm'),
             dmc.Col([
                 dmc.MediaQuery([
                     dmc.Group([
@@ -58,7 +58,7 @@ head = dmc.Header(
                                 ),
                             ]
                         )
-                    ], mt='6px')
+                    ])
                 ], smallerThan='md', styles={'display': 'none'}),
                 dmc.MediaQuery([
                     dmc.Menu(
@@ -97,9 +97,9 @@ head = dmc.Header(
                                     ),
                                 ]
                             ),
-                        ], style={'paddingTop': '0.7rem'}
+                        ], style={'paddingTop': '0.2rem'}
                     ),
                 ], largerThan='md', styles={'display': 'none'})
-            ], span=2, lg=2, md=2, sm=1, xs=1, p=0)
+            ], span=1, xs=1, sm=1, md=2, lg=2)
         ])
     ])
