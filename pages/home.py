@@ -46,11 +46,16 @@ layout = html.Div([
                 ], style={"height": 300}, justify='center'),
             ], span=8),
             dmc.Col([
-                dmc.Image(
-                    id='home_logo',
-                    src="/assets/home_logo.png",
-                    width=150,
-                    className='animate__animated animate__fadeInTopRight',
+                dmc.Center(
+                    style={"height": '100%'},
+                    children=[
+                        dmc.Image(
+                            id='home_logo',
+                            src="/assets/home_logo.png",
+                            className='animate__animated animate__fadeInTopRight',
+                            style={'maxWidth': '150px'}
+                        )
+                    ]
                 )
             ], span=2, offset=1)
         ]),
@@ -148,7 +153,7 @@ def create_cards(_, children):
                 withBorder=True,
                 radius="md",
                 style={"overflow": "hidden"}
-            )], span=3)
+            )], xs=12, sm=6, md=3, lg=3)
         children.append(card)
 
     return children

@@ -63,7 +63,7 @@ def build_layout(_, children):
                                         size="xl",
                                         onLabel="Code",
                                         offLabel="Preview"
-                                    ), span='content', style={"marginTop": "-21px"}),
+                                    ), span='auto',  style={"marginTop": "-21px"}),
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
 
@@ -129,4 +129,4 @@ def state_change(_, switch, id):
             ], gutter=0)
         ])
     else:
-        return dmc.Center(dmc.Image(src=img_file, width=600), p='xl')
+        return dmc.Center(dmc.Image(src=img_file, style={'minWidth': '70%', 'maxWidth': '70%'}), p='xl')
