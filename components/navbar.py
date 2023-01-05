@@ -64,7 +64,7 @@ head = dmc.Header(
                     dmc.Menu(
                         [
                             dmc.MenuTarget(dmc.ActionIcon(
-                                html.I(className='fas fa-bars fa-2x fa-fw'))),
+                                html.I(className='fas fa-bars fa-2x fa-fw'), pr='2rem')),
                             dmc.MenuDropdown(
                                 [
                                     dmc.MenuItem(

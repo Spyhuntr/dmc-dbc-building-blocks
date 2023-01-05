@@ -13,6 +13,9 @@ layout = html.Div([
         id='card-grid',
         children=[
             dmc.Col([
+                dmc.Center(
+                    style={"height": '100%'},
+                    children=[
                 dmc.Stack([
                     dmc.Text(
                         "Build your next Dash application even faster with premade responsive components designed"
@@ -43,7 +46,7 @@ layout = html.Div([
                                 className='fas fa-upload fa-lg fa-fw'),
                         )
                     ], position='center')
-                ], style={"height": 300}, justify='center'),
+                ], justify='center')]),
             ], span=8),
             dmc.Col([
                 dmc.Center(
