@@ -5,10 +5,12 @@ from botocore.exceptions import ClientError
 import requests
 from zipfile import ZipFile
 import io
+from dash import html
+from typing import List, Union
 
 bucket = 'dmc-dbc-building-blocks'
 
-def card_hdr(title: str, user: str):
+def card_hdr(title: str, user: str, deps: str):
 
     link = dmc.Anchor(
         href=f"https://github.com/{user}",
@@ -16,6 +18,25 @@ def card_hdr(title: str, user: str):
         size="xs",
         ml="-0.7rem",
         style={'color': 'rgb(134, 142, 150)'})
+
+
+    menu_items: List[Union[dmc.MenuItem, dmc.MenuLabel]] = [dmc.MenuLabel("Dependencies")]
+    for dep in list(deps.split(',')):
+        menu_item = dmc.MenuItem(dep)
+
+        menu_items.append(menu_item)
+
+    menu = dmc.Menu([
+        dmc.MenuTarget(
+            dmc.ActionIcon(
+                html.I(className='fas fa-sitemap fa-fw')
+            )
+        ),
+        dmc.MenuDropdown(
+            children=menu_items
+            
+        ),
+    ], trigger='hover')
 
     return dmc.Col(
         children=[
@@ -29,6 +50,7 @@ def card_hdr(title: str, user: str):
                     size="xs"
                 ),
                 link,
+                menu
             ]
             )], span=9)
 
@@ -121,13 +143,18 @@ def get_example_files(prefix):
             file = s3_client.get_object(Bucket=bucket, Key=key)
             #meta data on the file that has user-id etc on it
             header = s3_client.head_object(Bucket=bucket, Key=key)
-            
+
             f = ZipFile(io.BytesIO(file['Body'].read()), 'r')
             user = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-userid']
             card_heading = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-header']
             image_file = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-image']
+            dependencies = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-deps']
 
-            file_payload = {'file': f, 'user': user, 'card_heading': card_heading, 'image': image_file}
+            file_payload = {'file': f, 
+                            'user': user, 
+                            'card_heading': card_heading, 
+                            'image': image_file,
+                            'deps': dependencies}
 
             file_list.append(file_payload)
 

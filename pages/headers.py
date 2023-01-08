@@ -52,7 +52,7 @@ def build_layout(_, children):
                         dmc.Grid(
                             children=[
                                 u.card_hdr(
-                                    card_info['card_heading'], card_info['user']),
+                                    card_info['card_heading'], card_info['user'], card_info['deps']),
                                 dmc.Col(
                                     dmc.Switch(
                                         id={
