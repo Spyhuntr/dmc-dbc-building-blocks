@@ -122,7 +122,8 @@ def create_cards(_, children):
         {'image': '/assets/navbars-light.svg', 'title': 'Navbars', 'page': '/navbars', 'prefix': 'examples/navbars/'},
         {'image': '/assets/footers-light.svg', 'title': 'Footers', 'page': '/footers', 'prefix': 'examples/footers/'},
         {'image': '/assets/headers-light.svg', 'title': 'Headers', 'page': '/headers', 'prefix': 'examples/headers/'},
-        {'image': '/assets/menus-light.svg', 'title': 'Menus', 'page': '/menus', 'prefix': 'examples/menus/'}
+        {'image': '/assets/menus-light.svg', 'title': 'Menus', 'page': '/menus', 'prefix': 'examples/menus/'},
+        {'image': '/assets/uploaders-light.svg', 'title': 'Uploaders', 'page': '/uploaders', 'prefix': 'examples/uploaders/'}
 
     ]
 
