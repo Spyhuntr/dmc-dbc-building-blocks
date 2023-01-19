@@ -124,7 +124,8 @@ def create_cards(_, children):
         {'image': '/assets/headers-light.svg', 'title': 'Headers', 'page': '/headers', 'prefix': 'examples/headers/'},
         {'image': '/assets/menus-light.svg', 'title': 'Menus', 'page': '/menus', 'prefix': 'examples/menus/'},
         {'image': '/assets/uploaders-light.svg', 'title': 'Uploaders', 'page': '/uploaders', 'prefix': 'examples/uploaders/'},
-        {'image': '/assets/stats-light.svg', 'title': 'Stats', 'page': '/stats', 'prefix': 'examples/stats/'}
+        {'image': '/assets/stats-light.svg', 'title': 'Stats', 'page': '/stats', 'prefix': 'examples/stats/'},
+        {'image': '/assets/tabs-light.png', 'title': 'Tabs', 'page': '/tabs', 'prefix': 'examples/tabs/'}
 
     ]
 
