@@ -19,7 +19,7 @@ layout = dmc.LoadingOverlay([dmc.Grid(
                 ])
         ),
         dmc.Col(
-            dmc.Title(f"Uploaders", order=1)
+            dmc.Title(f"Uploaders/Downloaders", order=1)
         ),
         dmc.Col(
             id="uploaders-sample-container",
