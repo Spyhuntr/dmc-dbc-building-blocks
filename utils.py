@@ -75,13 +75,13 @@ def build_contributors():
                 ]
             ),
             href=f"https://github.com/{contributor}",
-            pl='1rem',
+            # pl='1rem',
             target='_blank'
         )
 
         contrib_group.append(new_link)
 
-    return contrib_group
+    return dmc.AvatarGroup(contrib_group)
 
 
 def create_presigned_post(bucket_name, object_name):
