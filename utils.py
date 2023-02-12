@@ -10,6 +10,7 @@ from typing import List, Union
 
 bucket = 'dmc-dbc-building-blocks'
 
+
 def card_hdr(title: str, user: str, deps: str):
 
     link = dmc.Anchor(
@@ -19,8 +20,8 @@ def card_hdr(title: str, user: str, deps: str):
         ml="-0.7rem",
         style={'color': 'rgb(134, 142, 150)'})
 
-
-    menu_items: List[Union[dmc.MenuItem, dmc.MenuLabel]] = [dmc.MenuLabel("Dependencies")]
+    menu_items: List[Union[dmc.MenuItem, dmc.MenuLabel]] = [
+        dmc.MenuLabel("Dependencies")]
     for dep in list(deps.split(',')):
         menu_item = dmc.MenuItem(dep)
 
@@ -34,25 +35,33 @@ def card_hdr(title: str, user: str, deps: str):
         ),
         dmc.MenuDropdown(
             children=menu_items
-            
+
         ),
     ], trigger='hover')
 
     return dmc.Col(
         children=[
-            dmc.Group([
-                dmc.Text(
-                    title,
-                    size="xl"
-                ),
-                dmc.Text(
-                    'Made by',
-                    size="xs"
-                ),
-                link,
-                menu
-            ]
-            )], span=9)
+            dmc.MediaQuery([
+                dmc.Group([
+                    dmc.Text(
+                        title,
+                        size="1.25rem"
+                    ),
+                    dmc.Text(
+                        'Made by',
+                        size="xs",
+                    ),
+                    link,
+                    menu
+                ])
+            ], smallerThan='sm', styles={'display': 'none'}),
+            dmc.MediaQuery([
+                    dmc.Text(
+                        title,
+                        size="calc(0.85rem + 0.5vw)"
+                    )
+            ], largerThan='sm', styles={'display': 'none'}),
+        ], span='auto')
 
 
 def build_contributors():
@@ -75,7 +84,6 @@ def build_contributors():
                 ]
             ),
             href=f"https://github.com/{contributor}",
-            # pl='1rem',
             target='_blank'
         )
 
@@ -116,7 +124,7 @@ def upload_file(contents, filename, date):
     result = create_presigned_post(bucket, 'uploads/' + filename)
 
     if result is not None:
-        #Upload file to S3 using presigned URL
+        # Upload file to S3 using presigned URL
         files = {'file': contents}
         r = requests.post(result['url'], data=result['fields'], files=files)
 
@@ -126,22 +134,22 @@ def upload_file(contents, filename, date):
 def get_example_files(prefix):
 
     s3_client = boto3.client('s3')
-    
+
     example_files = s3_client.list_objects_v2(
         Bucket=bucket,
         Prefix=prefix,
         Delimiter='/'
     )
 
-    file_list=[]
+    file_list = []
     for obj in example_files.get('Contents'):
-        
-        if obj['Size'] > 0:
-            key=obj.get('Key')
 
-            #sample file
+        if obj['Size'] > 0:
+            key = obj.get('Key')
+
+            # sample file
             file = s3_client.get_object(Bucket=bucket, Key=key)
-            #meta data on the file that has user-id etc on it
+            # meta data on the file that has user-id etc on it
             header = s3_client.head_object(Bucket=bucket, Key=key)
 
             f = ZipFile(io.BytesIO(file['Body'].read()), 'r')
@@ -150,9 +158,9 @@ def get_example_files(prefix):
             image_file = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-image']
             dependencies = header['ResponseMetadata']['HTTPHeaders']['x-amz-meta-deps']
 
-            file_payload = {'file': f, 
-                            'user': user, 
-                            'card_heading': card_heading, 
+            file_payload = {'file': f,
+                            'user': user,
+                            'card_heading': card_heading,
                             'image': image_file,
                             'deps': dependencies}
 
@@ -164,7 +172,7 @@ def get_example_files(prefix):
 def file_listings(prefix):
 
     s3_client = boto3.client('s3')
-    
+
     num_files = 0
 
     example_files = s3_client.list_objects_v2(
@@ -172,7 +180,7 @@ def file_listings(prefix):
         Prefix=prefix,
         Delimiter='/'
     )['Contents']
-    
+
     for content in example_files:
         if content['Size'] > 0:
             num_files += 1

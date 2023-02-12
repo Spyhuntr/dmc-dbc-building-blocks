@@ -53,7 +53,6 @@ def build_layout(_, children):
                             children=[
                                 u.card_hdr(
                                     card_info['card_heading'], card_info['user'], card_info['deps']),
-                                dmc.Col(
                                     dmc.Switch(
                                         id={
                                             "type": "headers-code-switch",
@@ -61,8 +60,8 @@ def build_layout(_, children):
                                         },
                                         size="xl",
                                         onLabel="Code",
-                                        offLabel="Preview"
-                                    ), span='auto', style={"marginTop": "-21px"}),
+                                        offLabel="Preview",
+                                    style={"marginTop": "-1.313rem", 'marginRight':'0.5rem'}),
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
 
