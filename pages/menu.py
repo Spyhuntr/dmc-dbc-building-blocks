@@ -128,4 +128,4 @@ def state_change(_, switch, id):
             ], gutter=0)
         ])
     else:
-        return dmc.Center(dmc.Image(src=img_file, style={'minWidth': '70%', 'maxWidth': '70%'}), p='xl')
+        return dmc.Center(dmc.Image(src=img_file, sx={'width': 'auto !important'}), p='xl')
