@@ -107,4 +107,4 @@ def build_examples(_, switch, id):
             img_file = 'https://dmc-dbc-building-blocks.s3.amazonaws.com/examples/auth/images/' + \
                 card_dict[id['index']]['image']
 
-            return dmc.Center(dmc.Image(src=img_file, style={'minWidth': '70%', 'maxWidth': '70%'}), p='xl')
+            return dmc.Center(dmc.Image(src=img_file, sx={'width': 'auto !important'}), p='xl')
