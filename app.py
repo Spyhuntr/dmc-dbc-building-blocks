@@ -11,29 +11,69 @@ app = Dash(__name__,
                "src": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js",
                "crossorigin": "anonymous"
            }],
-           external_stylesheets=[{
-               "href": "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css",
-               "rel": "stylesheet"
-           }],
-           meta_tags=[
-               {'name': 'Dash-Building-Blocks',
-                   'content': 'Dash Building Blocks'},
-               {'name': 'viewport', 'content': 'width=device-width, initial-scale=1'},
-               {'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge'},
-               {'property': 'og:url',
-                   'content': 'https://dash-building-blocks.com/'},
-               {'property': 'og:type', 'content': 'website'},
-               {'property': 'og:title', 'content': 'Dash Building Blocks'},
-               {'property': 'og:description',
-                   'content': 'Building blocks for Dash'},
-               {'property': 'og:image',
-                   'content': 'https://dash-building-blocks.com/assets/logo.png'},
-               {'property': 'og:image:width', 'content': '500'},
-               {'property': 'og:image:height', 'content': '100'}],
+            meta_tags=[
+        {'name':'DMC-DBC-Building-Blocks', 'content':'DMC/DBC Building Blocks'},
+        {'name': 'viewport', 'content': 'width=device-width, initial-scale=1'},
+        {'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge'},
+        {'property':'og:url', 'content': 'https://dmc-dbc-building-blocks.onrender.com/'},
+        {'property':'og:type', 'content': 'website'},
+        {'property':'og:title', 'content': 'DMC/DBC Building Blocks'},
+        {'property':'og:description','content':'Building blocks for DMC/DBC'},
+        {'property':'og:image', 'content':'https://dmc-dbc-building-blocks.onrender.com/assets/logo.png'},
+        {'property':'og:image:width', 'content':'500'},
+        {'property':'og:image:height', 'content':'100'}],
            suppress_callback_exceptions=True,
            use_pages=True)
 
-app.title = 'Dash Building Blocks'
+app.title = 'DMC & DBC Building Blocks'
+
+head = dmc.Header(
+    height=60,
+    p="sm",
+    mb="1rem",
+    children=[
+        dmc.Grid([
+            dmc.Col([
+                dmc.MediaQuery([
+                    dmc.Group([
+                    dmc.Image(
+                        src="/assets/logo.png", width=50
+                    ),
+                    dmc.Text(
+                        "Dash Mantine & Dash Bootstrap Building Blocks",
+                        size="xl",
+                        color="gray",
+                    )], p=0, m=0)
+                ], smallerThan='md', styles={'display': 'none'}),
+                dmc.MediaQuery([
+                    dmc.Text(
+                        "DMC & DBC",
+                        size="xl",
+                        color="gray",
+                    )
+                ], largerThan='md', styles={'display': 'none'})],
+                span=10, p='sm'),
+            dmc.Col(
+                dmc.Group([
+                    dmc.Anchor(
+                        dmc.Avatar(
+                            src="/assets/mantine.png"
+                        ),
+                        href="https://www.dash-mantine-components.com/",
+                        pl='1rem',
+                        target='_blank'
+                    ),
+                    dmc.Anchor(
+                        dmc.Avatar(
+                            src="/assets/dbc.png"
+                        ),
+                        href="https://dash-bootstrap-components.opensource.faculty.ai",
+                        pl='1rem',
+                        target='_blank'
+                    )
+                ], mt='6px'), span=2, p=0)
+        ])
+    ])
 
 app.layout = dmc.MantineProvider(
     theme={
