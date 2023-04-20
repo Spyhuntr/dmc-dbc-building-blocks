@@ -2,3 +2,4 @@ __pycache__
 *.yml
 environment/
 .vscode
+deploy.py
