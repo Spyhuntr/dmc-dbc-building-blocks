@@ -16,24 +16,24 @@ app = Dash(__name__,
                "rel": "stylesheet"
            }],
            meta_tags=[
-               {'name': 'DMC-DBC-Building-Blocks',
-                   'content': 'DMC/DBC Building Blocks'},
+               {'name': 'Dash-Building-Blocks',
+                   'content': 'Dash Building Blocks'},
                {'name': 'viewport', 'content': 'width=device-width, initial-scale=1'},
                {'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge'},
                {'property': 'og:url',
-                   'content': 'https://dmc-dbc-building-blocks.onrender.com/'},
+                   'content': 'https://dash-building-blocks.com/'},
                {'property': 'og:type', 'content': 'website'},
-               {'property': 'og:title', 'content': 'DMC/DBC Building Blocks'},
+               {'property': 'og:title', 'content': 'Dash Building Blocks'},
                {'property': 'og:description',
-                   'content': 'Building blocks for DMC/DBC'},
+                   'content': 'Building blocks for Dash'},
                {'property': 'og:image',
-                   'content': 'https://dmc-dbc-building-blocks.onrender.com/assets/logo.png'},
+                   'content': 'https://dash-building-blocks.com/assets/logo.png'},
                {'property': 'og:image:width', 'content': '500'},
                {'property': 'og:image:height', 'content': '100'}],
            suppress_callback_exceptions=True,
            use_pages=True)
 
-app.title = 'DMC & DBC Building Blocks'
+app.title = 'Dash Building Blocks'
 
 app.layout = dmc.MantineProvider(
     theme={
