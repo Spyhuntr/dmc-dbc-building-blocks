@@ -19,7 +19,7 @@ layout = dmc.LoadingOverlay([dmc.Grid(
                 ])
         ),
         dmc.Col(
-            dmc.Title(f"Uploaders/Downloaders", order=1)
+            dmc.Title(f"Uploaders / Downloaders", order=1)
         ),
         dmc.Col(
             id="uploaders-sample-container",
@@ -30,13 +30,9 @@ layout = dmc.LoadingOverlay([dmc.Grid(
 
 @callback(
     Output('uploaders-sample-container', 'children'),
-    [Input('url', 'pathname'),
-     Input('uploaders-sample-container', 'children')]
+    Input('uploaders-sample-container', 'children')
 )
-def build_layout(_, children):
-
-    if ctx.triggered_id == 'url':
-        return None
+def build_layout(children):
 
     for key, card_info in enumerate(u.get_example_files(prefix)):
 
@@ -62,7 +58,7 @@ def build_layout(_, children):
                                         size="xl",
                                         onLabel="Code",
                                         offLabel="Preview",
-                                    style={"marginTop": "-1.313rem", 'marginRight':'0.5rem'}),
+                                    style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
 
@@ -83,11 +79,10 @@ def build_layout(_, children):
 
 @callback(
     Output({'type': 'uploaders-rendering', 'index': MATCH}, 'children'),
-    [Input('url', 'pathname'),
-     Input({'type': 'uploaders-code-switch', 'index': MATCH}, 'checked')],
+    Input({'type': 'uploaders-code-switch', 'index': MATCH}, 'checked'),
     State({'type': 'uploaders-code-switch', 'index': MATCH}, 'id')
 )
-def state_change(_, switch, id):
+def state_change(switch, id):
 
     card_dict = u.get_example_files(prefix)
 

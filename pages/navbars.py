@@ -13,7 +13,7 @@ layout = dmc.LoadingOverlay([dmc.Grid(
         dmc.Col(
             dcc.Link(
                 id='navbars-back-btn',
-                href="/",
+                href="../",
                 children=[
                     dmc.Button("< Back to all categories", variant="outline")
                 ])
@@ -30,13 +30,9 @@ layout = dmc.LoadingOverlay([dmc.Grid(
 
 @callback(
     Output('navbars-sample-container', 'children'),
-    [Input('url', 'pathname'),
-     Input('navbars-sample-container', 'children')]
+    Input('navbars-sample-container', 'children')
 )
-def build_layout(_, children):
-
-    if ctx.triggered_id == 'url':
-        return None
+def build_layout(children):
 
     for key, card_info in enumerate(u.get_example_files(prefix)):
 
@@ -62,7 +58,7 @@ def build_layout(_, children):
                                         size="xl",
                                         onLabel="Code",
                                         offLabel="Preview",
-                                    style={"marginTop": "-1.313rem", 'marginRight':'0.5rem'}),
+                                    style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
 
@@ -83,11 +79,10 @@ def build_layout(_, children):
 
 @callback(
     Output({'type': 'navbars-rendering', 'index': MATCH}, 'children'),
-    [Input('url', 'pathname'),
-     Input({'type': 'navbars-code-switch', 'index': MATCH}, 'checked')],
+    Input({'type': 'navbars-code-switch', 'index': MATCH}, 'checked'),
     State({'type': 'navbars-code-switch', 'index': MATCH}, 'id')
 )
-def state_change(_, switch, id):
+def state_change(switch, id):
 
     card_dict = u.get_example_files(prefix)
 
@@ -119,7 +114,7 @@ def state_change(_, switch, id):
                     )], span=6),
                 dmc.Col([
                     dmc.Group([dmc.Text("CSS"), dmc.Text(
-                        "Add to ./assets/style.css in your app", size='sm', color='grey')], p='xs'),
+                        "Add to ./assets/style.css in your app", size='xs', color='grey')], p='xs'),
                     dmc.Prism(
                         language='css',
                         children=css_file,

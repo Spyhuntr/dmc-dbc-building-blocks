@@ -1,4 +1,4 @@
-from dash import Dash, dash, dcc, html
+from dash import Dash, dash, html
 import dash_mantine_components as dmc
 import utils as u
 import sys
@@ -52,7 +52,7 @@ head = dmc.Header(
                         color="gray",
                     )
                 ], largerThan='md', styles={'display': 'none'})],
-                span=10, p='sm'),
+                span='auto', p='sm'),
             dmc.Col(
                 dmc.Group([
                     dmc.Anchor(
@@ -71,7 +71,7 @@ head = dmc.Header(
                         pl='1rem',
                         target='_blank'
                     )
-                ], mt='6px'), span=2, p=0)
+                ], mt='6px'), span='content', p=0, pr='2rem')
         ])
     ])
 
@@ -83,7 +83,6 @@ app.layout = dmc.MantineProvider(
     withNormalizeCSS=True,
     children=[
         dmc.NotificationsProvider([
-            dcc.Location(id='url', refresh=False),
             head,
             dmc.Container(
                 [dash.page_container],
@@ -107,6 +106,4 @@ app.layout = dmc.MantineProvider(
 server = app.server
 
 if __name__ == '__main__':
-    app.run_server(
-        debug=True
-    )
+    app.run()

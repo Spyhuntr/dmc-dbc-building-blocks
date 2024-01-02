@@ -30,13 +30,9 @@ layout = dmc.LoadingOverlay([dmc.Grid(
 
 @callback(
     Output('headers-sample-container', 'children'),
-    [Input('url', 'pathname'),
-     Input('headers-sample-container', 'children')]
+    Input('headers-sample-container', 'children')
 )
-def build_layout(_, children):
-
-    if ctx.triggered_id == 'url':
-        return None
+def build_layout(children):
 
     for key, card_info in enumerate(u.get_example_files(prefix)):
         new_sample = dmc.Paper(
@@ -61,7 +57,7 @@ def build_layout(_, children):
                                         size="xl",
                                         onLabel="Code",
                                         offLabel="Preview",
-                                    style={"marginTop": "-1.313rem", 'marginRight':'0.5rem'}),
+                                    style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
                             ], gutter=0, grow=True, justify='space-around')
                     ]),
 
@@ -82,11 +78,10 @@ def build_layout(_, children):
 
 @callback(
     Output({'type': 'headers-rendering', 'index': MATCH}, 'children'),
-    [Input('url', 'pathname'),
-     Input({'type': 'headers-code-switch', 'index': MATCH}, 'checked')],
+    Input({'type': 'headers-code-switch', 'index': MATCH}, 'checked'),
     State({'type': 'headers-code-switch', 'index': MATCH}, 'id')
 )
-def build_examples(_, switch, id):
+def build_examples(switch, id):
 
     card_dict = u.get_example_files(prefix)
 
