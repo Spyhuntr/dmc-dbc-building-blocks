@@ -1,47 +1,47 @@
 from dash import html
 import dash_mantine_components as dmc
 
-head = dmc.Header(
-    height=60,
+head = dmc.AppShellHeader(
     p="sm",
     mb="1rem",
     children=[
         dmc.Grid([
-            dmc.Col([
-                dmc.MediaQuery([
-                    dmc.Group([
+            dmc.GridCol([
+                dmc.Group([
+                    html.Div([
                         dmc.Image(
-                            src="/assets/logo.png", width=50
-                        ),
-                        dmc.Text(
-                            "Dash Mantine & Dash Bootstrap Building Blocks",
-                            size="xl",
-                            color="gray",
-                        )], p=0, m=0)
-                ], smallerThan='md', styles={'display': 'none'}),
-                dmc.MediaQuery([
+                            src="/assets/logo.png"
+                    )], style={'width': 50}),
                     dmc.Text(
-                        "DMC & DBC",
+                        "Dash Mantine & Dash Bootstrap Building Blocks",
                         size="xl",
-                        color="gray",
+                        c="dimmed"
                     )
-                ], largerThan='md', styles={'display': 'none'})],
-                span=11, xs=11, sm=11, md=10, lg=10, p='sm'),
-            dmc.Col([
-                dmc.MediaQuery([
-                    dmc.Group([
-                        dmc.Anchor(
-                            dmc.Avatar(
-                                src="/assets/mantine.png"
-                            ),
-                            href="https://www.dash-mantine-components.com/",
-                            pl='1rem',
-                            target='_blank'
+                ], visibleFrom="md"),
+                dmc.Text(
+                    "DMC & DBC",
+                    size="xl",
+                    hiddenFrom="md",
+                    c="dimmed"
+                )
+            ],
+            span='auto', p='sm'),
+            dmc.GridCol(
+                dmc.Group([
+                    dmc.Anchor(
+                        dmc.Avatar(
+                            src="/assets/mantine.png"
                         ),
+                        href="https://www.dash-mantine-components.com/",
+                        target='_blank'
+                    ),
                         dmc.Menu(
                             [
-                                dmc.MenuTarget(dmc.ActionIcon(
-                                    dmc.Avatar(src="/assets/dbc.png"))),
+                                dmc.MenuTarget(
+                                    dmc.Avatar(
+                                        src="/assets/dbc.png",
+                                    style={'cursor': 'pointer'}),
+                                ),
                                 dmc.MenuDropdown(
                                     [
                                         dmc.MenuItem(
@@ -58,48 +58,7 @@ head = dmc.Header(
                                 ),
                             ]
                         )
-                    ])
-                ], smallerThan='md', styles={'display': 'none'}),
-                dmc.MediaQuery([
-                    dmc.Menu(
-                        [
-                            dmc.MenuTarget(dmc.ActionIcon(
-                                html.I(className='fas fa-bars fa-2x fa-fw'), pr='2rem')),
-                            dmc.MenuDropdown(
-                                [
-                                    dmc.MenuItem(
-                                        "Dash Mantine Components",
-                                        icon=dmc.Avatar(
-                                            src="/assets/mantine.png",
-                                            size='sm'
-                                        ),
-                                        href="https://www.dash-mantine-components.com/",
-                                        target="_blank"
-                                    ),
-                                    dmc.MenuDivider(),
-                                    dmc.MenuItem(
-                                        "Dash Bootstrap Components",
-                                        icon=dmc.Avatar(
-                                            src="/assets/dbc.png",
-                                            size='sm'
-                                        ),
-                                        href="https://dash-bootstrap-components.opensource.faculty.ai",
-                                        target="_blank"
-                                    ),
-                                    dmc.MenuItem(
-                                        "Dash Bootstrap Theme Explorer",
-                                        icon=dmc.Avatar(
-                                            src="/assets/dbc.png",
-                                            size='sm'
-                                        ),
-                                        href="https://hellodash.pythonanywhere.com/",
-                                        target="_blank"
-                                    ),
-                                ]
-                            ),
-                        ], style={'paddingTop': '0.2rem'}
-                    ),
-                ], largerThan='md', styles={'display': 'none'})
-            ], span=1, xs=1, sm=1, md=2, lg=2)
+                ], gap='xs', mt='6px'), span='content', p=0, pr='2rem'
+            )
         ])
     ])

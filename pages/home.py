@@ -8,81 +8,71 @@ import base64
 dash.register_page(__name__, path='/', title='DMC/DBC Home')
 
 layout = html.Div([
-    dmc.LoadingOverlay([
     dmc.Grid(
-        id='card-grid',
         children=[
-            dmc.Col([
+            dmc.GridCol([
                 dmc.Center(
                     style={"height": '100%'},
                     children=[
-                dmc.Stack([
-                    dmc.Text(
-                        "Build your next Dash application even faster with premade responsive components designed"
-                        " and built by DMC and DBC maintainers and community.",
-                        size="xl",
-                        color="gray",
-                        style={'textAlign': 'center'}
-                    ),
-                    dmc.Text("Contribute Building Block",
-                             color="gray",
-                             style={'textAlign': 'center'}),
-                    dmc.Group([
-                        dcc.Link(
-                            id='github-btn',
-                            href="https://github.com/Spyhuntr/dmc-dbc-building-blocks/issues/1#issue-1506988208",
-                            target='_blank',
-                            children=[
+                        dmc.Stack([
+                            dmc.Text(
+                                "Build your next Dash application even faster with premade responsive components designed"
+                                " and built by DMC and DBC maintainers and community.",
+                                size="xl",
+                                style={'textAlign': 'center'}
+                            ),
+                            dmc.Text("Contribute Building Block", style={'textAlign': 'center'}),
+                            dmc.Group([
+                                dcc.Link(
+                                    id='github-btn',
+                                    href="https://github.com/Spyhuntr/dmc-dbc-building-blocks/issues/1#issue-1506988208",
+                                    target='_blank',
+                                    children=[
+                                        dmc.Button(
+                                            "Github",
+                                            leftSection=html.I(
+                                                className='fa-brands fa-github fa-lg fa-fw'),
+                                        )
+                                    ]
+                                ),
                                 dmc.Button(
-                                    "Github",
-                                    leftIcon=html.I(
-                                        className='fa-brands fa-github fa-lg fa-fw'),
+                                    "Upload",
+                                    id='add-building-block-btn',
+                                    rightSection=html.I(className='fas fa-upload fa-lg fa-fw'),
                                 )
-                            ]),
-                        dmc.Button(
-                            "Upload",
-                            id='add-building-block-btn',
-                            rightIcon=html.I(
-                                className='fas fa-upload fa-lg fa-fw'),
-                        )
-                    ], position='center')
-                ], justify='center')]),
+                            ])
+                        ], align='center')
+                    ]
+                )
             ], span=8),
-            dmc.Col([
+            dmc.GridCol([
                 dmc.Center(
                     style={"height": '100%'},
                     children=[
                         dmc.Image(
                             id='home_logo',
                             src="/assets/home_logo.png",
-                            className='animate__animated animate__fadeInTopRight',
-                            style={'maxWidth': '150px'}
+                            style={'width': 100, 'transform': 'rotate(-35deg)'}
                         )
                     ]
                 )
             ], span=2, offset=1)
-        ]),
-    ]),
+        ], mb='1rem'),
+    dmc.SimpleGrid(id='card-grid', cols={"base": 1, "sm": 2, "lg": 4}, children=[]),
     dmc.Modal(
         id="upload-modal",
         size='xl',
-        transition='slide-down',
-        transitionDuration=400,
         children=[
-            dmc.LoadingOverlay([
             dmc.Text("Upload a zip file of your code.  The filename should include your github handle "
                      " if you would like to get credit for your building block.  "
                      "I will get a notification when new building blocks have been submitted.",
-                     color="gray",
                      style={'textAlign': 'center'}),
             dmc.Space(h=10),
             dmc.Text("What are building blocks?",
-                     color="gray",
                      style={'textAlign': 'center'}),
             dmc.Text("Building blocks are small UI components that are part of an app.  "
                      "These building blocks are not a full app but rather can be added into an "
                      "existing app to enhance the UI/UX experience of your dash application.",
-                     color="gray",
                      style={'textAlign': 'center'}),
             dmc.Space(h=20),
             dcc.Upload(
@@ -105,8 +95,7 @@ layout = html.Div([
                 },
             ),
             html.Div(id='output-upload')
-        ],
-    )])
+        ])
     ]
 )
 
@@ -130,7 +119,7 @@ def create_cards(_, children):
     ]
 
     for card in card_info:
-        card = dmc.Col([
+        card = html.Div([
             dmc.Paper(
                 children=[
                     dmc.Anchor(
@@ -151,16 +140,17 @@ def create_cards(_, children):
                                 size="xs",
                                 pl="md",
                                 pb="md",
-                                color="#868e96"
+                                c='dimmed'
                             )
                         ],
-                        variant="text"
+                        variant="text",
+                        style={'textDecoration': 'None'}
                     )],
                 shadow="xl",
                 withBorder=True,
                 radius="md",
                 style={"overflow": "hidden"}
-            )], xs=12, sm=6, md=3, lg=3)
+            )])
         children.append(card)
 
     return children
@@ -197,8 +187,7 @@ def update_output(content, name, date):
                 id="upload-notify",
                 action="show",
                 message="File successfully uploaded!",
-                icon=html.I(className='fas fa-check fa-lg fa-fw'),
-                color='green'
+                icon=html.I(className='fas fa-check fa-lg fa-fw')
             )
         else:
             return f"{message.status_code} - {message.reason}"

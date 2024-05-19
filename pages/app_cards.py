@@ -1,16 +1,17 @@
 
 import dash
-from dash import callback, Output, Input, State, MATCH, html, ctx, dcc
+from dash import callback, Output, Input, State, MATCH, html, dcc
 import dash_mantine_components as dmc
 import utils as u
 
 dash.register_page(__name__, path='/app_cards', title='Cards')
 prefix = 'examples/cards/'
 
+examples = u.get_example_files(prefix)
 
-layout = dmc.LoadingOverlay([dmc.Grid(
+layout = dmc.Grid(
     children=[
-        dmc.Col(
+        dmc.GridCol(
             dcc.Link(
                 id='cards-back_btn',
                 href="/",
@@ -18,14 +19,14 @@ layout = dmc.LoadingOverlay([dmc.Grid(
                     dmc.Button("< Back to all categories", variant="outline")
                 ])
         ),
-        dmc.Col(
+        dmc.GridCol(
             dmc.Title(f"Application Cards", order=1)
         ),
-        dmc.Col(
+        dmc.GridCol(
             id="cards-sample-container",
             children=[]
-        )
-    ])])
+        ),
+    ])
 
 
 @callback(
@@ -34,33 +35,30 @@ layout = dmc.LoadingOverlay([dmc.Grid(
 )
 def build_layout(children):
 
-    for key, card_info in enumerate(u.get_example_files(prefix)):
-        new_sample = dmc.Paper(
+    for key, card_info in enumerate(examples):
+
+        new_sample = dmc.Card(
             withBorder=True,
             radius="md",
             mb="3rem",
             shadow='xl',
-            style={"backgroundColor": "#f8f9fa", "overflow": "hidden"},
             children=[
-                dmc.Header(
-                    height=50,
-                    p="xs",
+                dmc.CardSection([
+                dmc.Grid(
                     children=[
-                        dmc.Grid(
-                            children=[
-                                u.card_hdr(
-                                    card_info['card_heading'], card_info['user'], card_info['deps']),
-                                    dmc.Switch(
-                                        id={
-                                            "type": "cards-code-switch",
-                                            "index": key
-                                        },
-                                        size="xl",
-                                        onLabel="Code",
-                                        offLabel="Preview",
-                                    style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
-                            ], gutter=0, grow=True, justify='space-around')
-                    ]),
+                        u.card_hdr(
+                            card_info['card_heading'], card_info['user'], card_info['deps']),
+                            dmc.Switch(
+                                id={
+                                    "type": "cards-code-switch",
+                                    "index": key
+                                },
+                                size="xl",
+                                onLabel="Code",
+                                offLabel="Preview",
+                            style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
+                    ], gutter=0, grow=True, justify='space-around'),
+                    ], inheritPadding=True, withBorder=True, py="xs"),
 
                 html.Div(
                     id={
@@ -82,24 +80,20 @@ def build_layout(children):
     Input({'type': 'cards-code-switch', 'index': MATCH}, 'checked'),
     State({'type': 'cards-code-switch', 'index': MATCH}, 'id')
 )
-def build_examples(switch, id):
+def state_change(switch, id):
 
-    card_dict = u.get_example_files(prefix)
+    filename = examples[id['index']]['file'].namelist()[0]
 
-    for name in card_dict[id['index']]['file'].namelist():
+    if switch:
 
-        if switch:
+        if filename.endswith(('py', 'css')):
+            return dmc.CodeHighlight(
+                language='python',
+                code=examples[id['index']]['file'].read(filename).decode('utf-8')
+            )
 
-            if name.endswith(('py', 'css')):
-                return dmc.Prism(
-                    language='python',
-                    children=card_dict[id['index']]['file'].read(
-                        name).decode('utf-8')
-                )
+    else:
+        
+        image_file = u.get_example_image('cards', examples[id['index']]['image'])
 
-        else:
-
-            img_file = 'https://dmc-dbc-building-blocks.s3.amazonaws.com/examples/cards/images/' + \
-                card_dict[id['index']]['image']
-
-            return dmc.Center(dmc.Image(src=img_file, sx={'width': 'auto !important'}), p='xl')
+        return dmc.Center(html.Img(src=f'data:image/png;base64,{image_file}'), p='xl')

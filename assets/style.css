@@ -1,12 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
-.footer {
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 1rem 0;
-    text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 .card-hdr {
     background-color: #f8f9fa;
@@ -23,4 +15,8 @@
 
 .mantine-LoadingOverlay-root{
     position: fixed;
+}
+
+.mantine-Switch-track {
+    padding: 0.5rem;
 }

@@ -7,10 +7,11 @@ import utils as u
 dash.register_page(__name__, path='/stats', title='Home')
 prefix = 'examples/stats/'
 
+examples = u.get_example_files(prefix)
 
-layout = dmc.LoadingOverlay([dmc.Grid(
+layout = dmc.Grid(
     children=[
-        dmc.Col(
+        dmc.GridCol(
             dcc.Link(
                 id='stats-back-btn',
                 href="/",
@@ -18,14 +19,14 @@ layout = dmc.LoadingOverlay([dmc.Grid(
                     dmc.Button("< Back to all categories", variant="outline")
                 ])
         ),
-        dmc.Col(
+        dmc.GridCol(
             dmc.Title(f"Stats", order=1)
         ),
-        dmc.Col(
+        dmc.GridCol(
             id="stats-sample-container",
             children=[]
         )
-    ])])
+    ])
 
 
 @callback(
@@ -34,33 +35,29 @@ layout = dmc.LoadingOverlay([dmc.Grid(
 )
 def build_layout(children):
 
-    for key, card_info in enumerate(u.get_example_files(prefix)):
-
-        new_sample = dmc.Paper(
+    for key, card_info in enumerate(examples):
+        new_sample = dmc.Card(
             withBorder=True,
             radius="md",
-            mb="2rem",
-            style={"backgroundColor": "#f8f9fa", "overflow": "hidden"},
+            mb="3rem",
+            shadow='xl',
             children=[
-                dmc.Header(
-                    height=50,
-                    p="xs",
+                dmc.CardSection([
+                dmc.Grid(
                     children=[
-                        dmc.Grid(
-                            children=[
-                                u.card_hdr(
-                                    card_info['card_heading'], card_info['user'], card_info['deps']),
-                                    dmc.Switch(
-                                        id={
-                                            "type": "stats-code-switch",
-                                            "index": key
-                                        },
-                                        size="xl",
-                                        onLabel="Code",
-                                        offLabel="Preview",
-                                    style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
-                            ], gutter=0, grow=True, justify='space-around')
-                    ]),
+                        u.card_hdr(
+                            card_info['card_heading'], card_info['user'], card_info['deps']),
+                            dmc.Switch(
+                                id={
+                                    "type": "stats-code-switch",
+                                    "index": key
+                                },
+                                size="xl",
+                                onLabel="Code",
+                                offLabel="Preview",
+                            style={"marginTop": "-0.2rem", 'marginRight':'0.5rem'}),
+                    ], gutter=0, grow=True, justify='space-around'),
+                    ], inheritPadding=True, withBorder=True, py="xs"),
 
                 html.Div(
                     id={
@@ -84,56 +81,56 @@ def build_layout(children):
 )
 def state_change(switch, id):
 
-    card_dict = u.get_example_files(prefix)
+    filename = examples[id['index']]['file'].namelist()
 
     py_file = None
     css_file = None
-    img_file = None
-    for name in card_dict[id['index']]['file'].namelist():
+    for name in filename:
 
         if name.endswith('py'):
-            py_file = card_dict[id['index']]['file'].read(name).decode('utf-8')
+            py_file = examples[id['index']]['file'].read(name).decode('utf-8')
 
         if name.endswith('css'):
-            css_file = card_dict[id['index']]['file'].read(name).decode('utf-8')
-
-    img_file = 'https://dmc-dbc-building-blocks.s3.amazonaws.com/examples/stats/images/' + \
-        card_dict[id['index']]['image']
+            css_file = examples[id['index']]['file'].read(name).decode('utf-8')
 
     if switch:
-        if css_file is not None:
+        if css_file is None:
+            return html.Div([
+            dmc.Grid([
+                dmc.GridCol([
+                    dmc.Text("Python", p="xs"),
+                    dmc.CodeHighlight(
+                        language='python',
+                        code=py_file,
+                        style={'border': '1px solid #ececec'},
+                        mr='1rem'
+                    )])
+            ], gutter=0)
+        ])
+
+        else:
+            
             return html.Div([
                 dmc.Grid([
-                    dmc.Col([
+                    dmc.GridCol([
                         dmc.Text("Python", p="xs"),
-                        dmc.Prism(
+                        dmc.CodeHighlight(
                             language='python',
-                            children=py_file,
+                            code=py_file,
                             style={'border': '1px solid #ececec'},
                             mr='1rem'
                         )], span=6),
-                    dmc.Col([
+                    dmc.GridCol([
                         dmc.Group([dmc.Text("CSS"), dmc.Text(
-                            "Add to ./assets/style.css in your app", size='sm', color='grey')], p='xs'),
-                        dmc.Prism(
+                            "Add to ./assets/style.css in your app", size='xs')], p='xs'),
+                        dmc.CodeHighlight(
                             language='css',
-                            children=css_file,
+                            code=css_file,
                             style={'border': '1px solid #ececec'}
                         )], span=6)
                 ], gutter=0)
             ])
-        else:
-            return html.Div([
-                dmc.Grid([
-                    dmc.Col([
-                        dmc.Text("Python", p="xs"),
-                        dmc.Prism(
-                            language='python',
-                            children=py_file,
-                            style={'border': '1px solid #ececec'},
-                            mr='1rem'
-                        )])
-                ], gutter=0)
-            ])
     else:
-        return dmc.Center(dmc.Image(src=img_file, sx={'width': 'auto !important'}), p='xl')
+        image_file = u.get_example_image('stats', examples[id['index']]['image'])
+
+        return dmc.Center(html.Img(src=f'data:image/png;base64,{image_file}'), p='xl')

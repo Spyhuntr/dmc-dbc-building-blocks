@@ -7,9 +7,11 @@ from zipfile import ZipFile
 import io
 from dash import html
 from typing import List, Union
+from base64 import b64encode
 
 bucket = 'dmc-dbc-building-blocks'
 
+s3_client = boto3.client('s3')
 
 def card_hdr(title: str, user: str, deps: str):
 
@@ -20,8 +22,7 @@ def card_hdr(title: str, user: str, deps: str):
         ml="-0.7rem",
         style={'color': 'rgb(134, 142, 150)'})
 
-    menu_items: List[Union[dmc.MenuItem, dmc.MenuLabel]] = [
-        dmc.MenuLabel("Dependencies")]
+    menu_items: List[Union[dmc.MenuItem, dmc.MenuLabel]] = [dmc.MenuLabel("Dependencies")]
     for dep in list(deps.split(',')):
         menu_item = dmc.MenuItem(dep)
 
@@ -29,8 +30,8 @@ def card_hdr(title: str, user: str, deps: str):
 
     menu = dmc.Menu([
         dmc.MenuTarget(
-            dmc.ActionIcon(
-                html.I(className='fas fa-sitemap fa-fw')
+            dmc.Avatar(
+                html.I(className='fas fa-sitemap fa-fw'), size='sm'
             )
         ),
         dmc.MenuDropdown(
@@ -39,9 +40,8 @@ def card_hdr(title: str, user: str, deps: str):
         ),
     ], trigger='hover')
 
-    return dmc.Col(
+    return dmc.GridCol(
         children=[
-            dmc.MediaQuery([
                 dmc.Group([
                     dmc.Text(
                         title,
@@ -53,15 +53,13 @@ def card_hdr(title: str, user: str, deps: str):
                     ),
                     link,
                     menu
-                ])
-            ], smallerThan='sm', styles={'display': 'none'}),
-            dmc.MediaQuery([
-                    dmc.Text(
-                        title,
-                        size="calc(0.85rem + 0.5vw)"
-                    )
-            ], largerThan='sm', styles={'display': 'none'}),
-        ], span='auto')
+                ], visibleFrom='sm'),
+                dmc.Text(
+                    title,
+                    size="1.25rem",
+                    hiddenFrom='sm'
+                )
+        ], style={'align-content': 'center'}, span='auto')
 
 
 def build_contributors():
@@ -75,8 +73,6 @@ def build_contributors():
             dmc.Tooltip(
                 label=contributor,
                 withArrow=True,
-                transition="pop-top-right",
-                transitionDuration=300,
                 children=[
                     dmc.Avatar(
                         src=f"https://github.com/{contributor}.png", radius="xl"
@@ -104,9 +100,6 @@ def create_presigned_post(bucket_name, object_name):
     :return: None if error.
     """
 
-    # Generate a presigned S3 POST URL
-    s3_client = boto3.client('s3')
-
     try:
         response = s3_client.generate_presigned_post(bucket_name,
                                                      object_name,
@@ -132,8 +125,6 @@ def upload_file(contents, filename, date):
 
 
 def get_example_files(prefix):
-
-    s3_client = boto3.client('s3')
 
     example_files = s3_client.list_objects_v2(
         Bucket=bucket,
@@ -171,8 +162,6 @@ def get_example_files(prefix):
 
 def file_listings(prefix):
 
-    s3_client = boto3.client('s3')
-
     num_files = 0
 
     example_files = s3_client.list_objects_v2(
@@ -186,3 +175,10 @@ def file_listings(prefix):
             num_files += 1
 
     return num_files
+
+
+def get_example_image(prefix, image_name):
+
+    image = s3_client.get_object(Bucket=bucket, Key=f'examples/{prefix}/images/{image_name}')
+
+    return b64encode(image['Body'].read()).decode('utf-8')
