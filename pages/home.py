@@ -115,7 +115,8 @@ def create_cards(_, children):
         {'image': '/assets/uploaders-light.svg', 'title': 'Uploaders / Downloaders', 'page': '/uploaders', 'prefix': 'examples/uploaders/'},
         {'image': '/assets/stats-light.svg', 'title': 'Stats', 'page': '/stats', 'prefix': 'examples/stats/'},
         {'image': '/assets/tabs-light.png', 'title': 'Tabs', 'page': '/tabs', 'prefix': 'examples/tabs/'},
-        {'image': '/assets/auth-light.svg', 'title': 'Authentication', 'page': '/authentication', 'prefix': 'examples/auth/'}
+        {'image': '/assets/auth-light.svg', 'title': 'Authentication', 'page': '/authentication', 'prefix': 'examples/auth/'},
+        {'image': '/assets/tables.svg', 'title': 'Tables', 'page': '/tables', 'prefix': 'examples/tables/'}
     ]
 
     for card in card_info:
@@ -148,7 +149,7 @@ def create_cards(_, children):
                     )],
                 shadow="xl",
                 withBorder=True,
-                radius="md",
+                radius="lg",
                 style={"overflow": "hidden"}
             )])
         children.append(card)

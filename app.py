@@ -42,7 +42,7 @@ app.layout = dmc.MantineProvider(
         'fontFamily': '"Open Sans", sans-serif'
     },
     children=[
-        dmc.NotificationProvider(),
+        dmc.NotificationProvider(position="top-right"),
         dmc.AppShell([
             head,
             dmc.AppShellMain(
@@ -61,7 +61,7 @@ app.layout = dmc.MantineProvider(
                             )
                         ])
                     ])
-                ]
+                ], style={'backgroundColor': '#f1f3f5'}
             )
         ],
         header={"height": 60},

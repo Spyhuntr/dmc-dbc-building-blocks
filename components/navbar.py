@@ -25,7 +25,7 @@ head = dmc.AppShellHeader(
                     c="dimmed"
                 )
             ],
-            span='auto', p='sm'),
+            span='auto'),
             dmc.GridCol(
                 dmc.Group([
                     dmc.Anchor(
@@ -33,6 +33,13 @@ head = dmc.AppShellHeader(
                             src="/assets/mantine.png"
                         ),
                         href="https://www.dash-mantine-components.com/",
+                        target='_blank'
+                    ),
+                    dmc.Anchor(
+                        dmc.Avatar(
+                            src="/assets/plotly.png"
+                        ),
+                        href="https://dash.plotly.com/dash-ag-grid",
                         target='_blank'
                     ),
                         dmc.Menu(

@@ -59,7 +59,7 @@ def card_hdr(title: str, user: str, deps: str):
                     size="1.25rem",
                     hiddenFrom='sm'
                 )
-        ], style={'align-content': 'center'}, span='auto')
+        ], style={'alignContent': 'center'}, span='auto')
 
 
 def build_contributors():
@@ -136,6 +136,7 @@ def get_example_files(prefix):
     for obj in example_files.get('Contents'):
 
         if obj['Size'] > 0:
+
             key = obj.get('Key')
 
             # sample file
