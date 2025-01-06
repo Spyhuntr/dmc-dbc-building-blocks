@@ -116,7 +116,10 @@ def create_cards(_, children):
         {'image': '/assets/stats-light.svg', 'title': 'Stats', 'page': '/stats', 'prefix': 'examples/stats/'},
         {'image': '/assets/tabs-light.png', 'title': 'Tabs', 'page': '/tabs', 'prefix': 'examples/tabs/'},
         {'image': '/assets/auth-light.svg', 'title': 'Authentication', 'page': '/authentication', 'prefix': 'examples/auth/'},
-        {'image': '/assets/tables.svg', 'title': 'Tables', 'page': '/tables', 'prefix': 'examples/tables/'}
+        {'image': '/assets/tables.svg', 'title': 'Tables', 'page': '/tables', 'prefix': 'examples/tables/'},
+        {'image': '/assets/carousels-light.svg', 'title': 'Carousels', 'page': '/carousels', 'prefix': 'examples/carousels/'},
+        {'image': '/assets/buttons-light.svg', 'title': 'Buttons', 'page': '/buttons', 'prefix': 'examples/buttons/'},
+        {'image': '/assets/leaflet-light.svg', 'title': 'Leaflet', 'page': '/leaflet', 'prefix': 'examples/leaflet/'}
     ]
 
     for card in card_info:

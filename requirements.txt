@@ -1,5 +1,5 @@
-boto3==1.34.98
-dash==2.17.0
-dash-mantine-components==0.14.3
-gunicorn==22.0.0
-requests==2.31.0
+boto3==1.35.92
+dash==2.18.2
+dash-mantine-components==0.15.1
+gunicorn==23.0.0
+requests==2.32.3
