@@ -65,7 +65,7 @@ def card_hdr(title: str, user: str, deps: str):
 def build_contributors():
 
     contributors = ['snehilvj', 'tcbegley', 'AnnMarieW', 'Spyhuntr', 'Sohibjon', 'pip-install-python',
-                    'amihaiOff', 'BSd3v']
+                    'amihaiOff', 'BSd3v', 'RaghunathDewal', 'topaccina', 'martin2097']
     contrib_group = []
     for contributor in contributors:
 
